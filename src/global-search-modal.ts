@@ -26,7 +26,7 @@ export class GlobalSearchModal extends Modal {
 		const { contentEl } = this;
 		contentEl.addClass("dfs-global-search-modal");
 
-		contentEl.createEl("h3", { text: "Global search (diacritics-free)" });
+		contentEl.createEl("h3", { text: "Global search" });
 
 		// Search input
 		const searchRow = contentEl.createDiv({ cls: "dfs-row" });

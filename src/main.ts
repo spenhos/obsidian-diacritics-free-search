@@ -71,10 +71,6 @@ class DFSSettingTab extends PluginSettingTab {
 		const { containerEl } = this;
 		containerEl.empty();
 
-		containerEl.createEl("p", {
-			text: "Search and replace text ignoring diacritical marks. Supports Hebrew nikud, Arabic tashkil, Latin accents, and all other Unicode combining marks.",
-		});
-
 		new Setting(containerEl)
 			.setName("Case sensitive by default")
 			.setDesc("Start searches with case sensitivity enabled")
@@ -86,21 +82,5 @@ class DFSSettingTab extends PluginSettingTab {
 						await this.plugin.saveSettings();
 					})
 			);
-
-		new Setting(containerEl)
-			.setName("Supported scripts")
-			.setHeading();
-
-		const list = containerEl.createEl("ul");
-		const scripts = [
-			"Hebrew (nikud & cantillation marks)",
-			"Arabic (tashkil / harakat)",
-			"Latin (accents: é→e, ñ→n, ü→u, etc.)",
-			"Greek (polytonic accents)",
-			"Cyrillic (combining marks)",
-			"Devanagari & other Indic scripts",
-			"Any Unicode combining mark (category Mn)",
-		];
-		scripts.forEach((s) => list.createEl("li", { text: s }));
 	}
 }
