@@ -1,62 +1,174 @@
-# Diacritics-Free Search
+<div align="center">
 
-An Obsidian plugin that lets you search and replace text **ignoring diacritical marks** — Hebrew nikud, Arabic tashkil, Latin accents, and any other Unicode combining marks.
+# ✨ Diacritics-Free Search
+
+**Search and replace text ignoring diacritical marks in Obsidian**
+
+Hebrew nikud · Arabic tashkil · Latin accents · Greek polytonic · Any Unicode combining mark
+
+[![GitHub release](https://img.shields.io/github/v/release/spenhos/obsidian-diacritics-free-search?style=flat-square)](https://github.com/spenhos/obsidian-diacritics-free-search/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](./LICENSE)
+
+🌐 English | [Español](./README_es.md) | [עברית](./README_he.md)
+
+---
+
+</div>
 
 ## The Problem
 
-If your notes contain vocalized Hebrew (בְּרֵאשִׁית), you can't find them by typing just the consonants (בראשית). The same applies to accented Latin (café vs cafe), Arabic with tashkil, and more.
+If your notes contain vocalized Hebrew like **בְּרֵאשִׁית**, searching for **בראשית** (without vowels) won't find it. The same happens with **café** vs **cafe**, Arabic **بِسْمِ** vs **بسم**, and any other diacritical marks.
 
-This plugin solves that by normalizing text during search, so diacritics are transparent to the search engine.
+**Diacritics-Free Search** solves this by making all diacritics transparent during search — type without marks and find text that has them.
+
+```
+Search query:    בראשית        →  Finds:  בְּרֵאשִׁית ✓
+Search query:    cafe           →  Finds:  café ✓
+Search query:    بسم            →  Finds:  بِسْمِ ✓
+```
+
+---
 
 ## Features
 
-- **Local search** (Ctrl/Cmd+F): Find & Replace in the current note, ignoring diacritics
-- **Global search** (Ctrl/Cmd+Shift+F): Search across your entire vault
-- **Find & Replace**: Replace matches one by one or all at once
-- **Case sensitivity toggle**
-- **Multi-script support**: Hebrew, Arabic, Latin, Greek, Cyrillic, Devanagari, and any Unicode Mn category mark
+### 🔍 Local Search — Find & Replace in Current Note
+
+<table>
+<tr>
+<td width="120"><strong>Shortcut</strong></td>
+<td><kbd>Option</kbd> + <kbd>F</kbd></td>
+</tr>
+<tr>
+<td><strong>Behavior</strong></td>
+<td>Opens a search bar at the top of the active note (Chrome-style)</td>
+</tr>
+</table>
+
+**Capabilities:**
+
+- **Real-time highlighting** — All matches highlighted in yellow; current match in orange
+- **Match navigation** — Use ▲▼ buttons or <kbd>Enter</kbd> / <kbd>Shift+Enter</kbd> to jump between matches
+- **Scrollbar markers** — Yellow ticks on the scrollbar show where matches are (clickable!)
+- **Replace one / Replace all** — Replace the current match or all matches at once
+- **Case sensitivity toggle** — Click "Aa" to switch between case-sensitive and insensitive
+- **Remembers last search** — Reopen the bar and your previous query is still there
+- **Escape to close** — Press <kbd>Esc</kbd> from anywhere (even while editing) to dismiss
+
+---
+
+### 🌐 Global Search — Search Entire Vault
+
+<table>
+<tr>
+<td width="120"><strong>Shortcut</strong></td>
+<td><kbd>Shift</kbd> + <kbd>Option</kbd> + <kbd>F</kbd></td>
+</tr>
+<tr>
+<td><strong>Behavior</strong></td>
+<td>Opens a modal to search across all markdown files in your vault</td>
+</tr>
+</table>
+
+**Capabilities:**
+
+- **Vault-wide search** — Scans every `.md` file in your vault
+- **Highlighted context** — Shows the matching line with the found text highlighted
+- **Click to navigate** — Click any result to open the file and jump to the exact match
+- **Match count per file** — See how many matches each file contains
+- **Global Replace All** — Replace a term across all files in one click
+- **Debounced input** — Waits 300ms after you stop typing to avoid lag on large vaults
+
+---
+
+### 🎯 How Matching Works
+
+The plugin uses Unicode NFD normalization to decompose characters, then removes all combining marks (Unicode category `Mn`):
+
+| Original | Normalized | Script |
+|----------|-----------|--------|
+| בְּרֵאשִׁית | בראשית | Hebrew (nikud + cantillation) |
+| café | cafe | Latin (acute accent) |
+| بِسْمِ ٱللَّهِ | بسم الله | Arabic (tashkil) |
+| naïve | naive | Latin (diaeresis) |
+| Ἀθῆναι | Αθηναι | Greek (polytonic) |
+| résumé | resume | Latin (multiple accents) |
+| über | uber | Latin (umlaut) |
+
+> 💡 **Both sides are normalized** — if you search *with* diacritics, it still matches text *without* them (and vice versa).
+
+---
+
+### ⌨️ Keyboard Shortcuts
+
+| Action | Shortcut |
+|--------|----------|
+| Open local search | <kbd>Option</kbd> + <kbd>F</kbd> |
+| Open global search | <kbd>Shift</kbd> + <kbd>Option</kbd> + <kbd>F</kbd> |
+| Next match | <kbd>Enter</kbd> or ▼ button |
+| Previous match | <kbd>Shift</kbd> + <kbd>Enter</kbd> or ▲ button |
+| Close search | <kbd>Esc</kbd> (works from anywhere) |
+| Replace current | <kbd>Enter</kbd> in replace field |
+
+Both commands are also available via the **Command Palette** (<kbd>Cmd</kbd> + <kbd>P</kbd>).
+
+---
+
+### 🗂️ Supported Scripts
+
+| Script | Example | What's stripped |
+|--------|---------|----------------|
+| 🇮🇱 Hebrew | בְּרֵאשִׁית → בראשית | Nikud, cantillation marks |
+| 🇸🇦 Arabic | بِسْمِ → بسم | Tashkil / harakat |
+| 🇫🇷 Latin | café → cafe | Accents, umlauts, cedillas, tildes |
+| 🇬🇷 Greek | Ἀθῆναι → Αθηναι | Polytonic accents, breathings |
+| 🇷🇺 Cyrillic | й → и | Combining breve |
+| 🇮🇳 Devanagari | — | Anusvara, virama, etc. |
+| 🌍 **Any** | — | All Unicode Mn (Mark, Nonspacing) |
+
+---
 
 ## Installation
 
 ### Manual Installation
 
-1. Download the latest release (or build from source)
-2. Copy `main.js`, `manifest.json`, and `styles.css` (if present) into your vault's `.obsidian/plugins/diacritics-free-search/` folder
-3. Enable the plugin in Obsidian Settings → Community Plugins
+1. Download `main.js` and `manifest.json` from the [latest release](https://github.com/spenhos/obsidian-diacritics-free-search/releases)
+2. Create folder: `<your-vault>/.obsidian/plugins/diacritics-free-search/`
+3. Place both files inside
+4. Restart Obsidian
+5. Go to **Settings → Community Plugins** → Enable "Diacritics-Free Search"
 
 ### Building from Source
 
 ```bash
+git clone https://github.com/spenhos/obsidian-diacritics-free-search.git
+cd obsidian-diacritics-free-search
 npm install
 npm run build
 ```
 
-This generates `main.js` in the project root.
+Copy `main.js` + `manifest.json` to your vault's plugin folder.
 
-## Usage
+---
 
-| Action | Shortcut |
-|--------|----------|
-| Search in current note | `Ctrl/Cmd + F` |
-| Search entire vault | `Ctrl/Cmd + Shift + F` |
+## Settings
 
-You can also access both commands from the Command Palette (Ctrl/Cmd+P).
+| Setting | Description | Default |
+|---------|-------------|---------|
+| Override Ctrl/Cmd+F | Replace native search with diacritics-free search | On |
+| Case sensitive by default | Start searches with case sensitivity enabled | Off |
 
-### Settings
+---
 
-- **Override Ctrl/Cmd+F**: Toggle whether this plugin replaces the native search shortcut
-- **Case sensitive by default**: Start searches with case sensitivity on or off
+## Contributing
 
-## How It Works
+Issues and PRs are welcome! If you find a script or language where diacritics aren't being properly stripped, please [open an issue](https://github.com/spenhos/obsidian-diacritics-free-search/issues) with an example.
 
-The plugin uses Unicode NFD normalization followed by removal of all characters in the Unicode `Mn` (Mark, Nonspacing) category. This means:
+---
 
-- `בְּרֵאשִׁית` → `בראשית` (Hebrew nikud removed)
-- `café` → `cafe` (Latin accent removed)
-- `بِسْمِ` → `بسم` (Arabic tashkil removed)
+<div align="center">
 
-Position mapping ensures that when you replace text, the original characters (including their diacritics) are correctly targeted.
+Made with ❤️ for multilingual note-takers
 
-## License
+**[Saleh Penhos](https://github.com/spenhos)**
 
-MIT
+</div>
