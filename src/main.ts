@@ -71,10 +71,6 @@ class DFSSettingTab extends PluginSettingTab {
 		const { containerEl } = this;
 		containerEl.empty();
 
-		new Setting(containerEl)
-			.setName("Diacritics-free search")
-			.setHeading();
-
 		containerEl.createEl("p", {
 			text: "Search and replace text ignoring diacritical marks. Supports Hebrew nikud, Arabic tashkil, Latin accents, and all other Unicode combining marks.",
 		});
