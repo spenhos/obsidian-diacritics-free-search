@@ -3,12 +3,10 @@ import { LocalSearchBar } from "./local-search-modal";
 import { GlobalSearchModal } from "./global-search-modal";
 
 interface DFSSettings {
-	overrideCtrlF: boolean;
 	caseSensitive: boolean;
 }
 
 const DEFAULT_SETTINGS: DFSSettings = {
-	overrideCtrlF: true,
 	caseSensitive: false,
 };
 
@@ -80,20 +78,6 @@ class DFSSettingTab extends PluginSettingTab {
 		containerEl.createEl("p", {
 			text: "Search and replace text ignoring diacritical marks. Supports Hebrew nikud, Arabic tashkil, Latin accents, and all other Unicode combining marks.",
 		});
-
-		new Setting(containerEl)
-			.setName("Override Ctrl/Cmd+F")
-			.setDesc(
-				"Replace the native Find in note with diacritics-free search. Disable if you want to keep native search on Ctrl+F and use the command palette instead."
-			)
-			.addToggle((toggle) =>
-				toggle
-					.setValue(this.plugin.settings.overrideCtrlF)
-					.onChange(async (value) => {
-						this.plugin.settings.overrideCtrlF = value;
-						await this.plugin.saveSettings();
-					})
-			);
 
 		new Setting(containerEl)
 			.setName("Case sensitive by default")

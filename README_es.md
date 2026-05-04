@@ -154,7 +154,6 @@ Copia `main.js` + `manifest.json` a la carpeta de plugins de tu vault.
 
 | Opción | Descripción | Valor por defecto |
 |--------|-------------|-------------------|
-| Override Ctrl/Cmd+F | Reemplazar la búsqueda nativa con búsqueda sin diacríticos | Activado |
 | Case sensitive by default | Iniciar búsquedas con sensibilidad a mayúsculas activada | Desactivado |
 
 ---
