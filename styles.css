@@ -1,0 +1,271 @@
+/* ===== Local Search Bar ===== */
+.dfs-search-bar {
+	position: sticky;
+	top: 0;
+	z-index: 100;
+	background: var(--background-secondary);
+	border-bottom: 1px solid var(--background-modifier-border);
+	padding: 6px 10px;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.dfs-bar-row {
+	display: flex;
+	gap: 6px;
+	align-items: center;
+}
+
+.dfs-bar-input {
+	flex: 1;
+	padding: 4px 8px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 4px;
+	background: var(--background-primary);
+	color: var(--text-normal);
+	font-size: 13px;
+	min-width: 0;
+}
+
+.dfs-bar-input:focus {
+	border-color: var(--interactive-accent);
+	outline: none;
+}
+
+.dfs-bar-status {
+	font-size: 12px;
+	color: var(--text-muted);
+	min-width: 40px;
+	text-align: center;
+}
+
+.dfs-bar-btn {
+	padding: 2px 6px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 4px;
+	background: var(--interactive-normal);
+	color: var(--text-normal);
+	cursor: pointer;
+	font-size: 12px;
+	line-height: 1.4;
+}
+
+.dfs-bar-btn:hover {
+	background: var(--interactive-hover);
+}
+
+.dfs-bar-btn-text {
+	font-size: 12px;
+	padding: 2px 8px;
+}
+
+.dfs-bar-close {
+	font-size: 14px;
+	padding: 2px 6px;
+}
+
+.dfs-bar-close:hover {
+	background: var(--background-modifier-error);
+	color: white;
+}
+
+.dfs-bar-option {
+	font-size: 12px;
+	color: var(--text-muted);
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 2px;
+	white-space: nowrap;
+}
+
+/* ===== Scrollbar Match Markers ===== */
+.dfs-cm-editor-relative {
+	position: relative;
+}
+
+.dfs-scrollbar-markers {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	width: 12px;
+	pointer-events: none;
+	z-index: 300;
+}
+
+.dfs-scrollbar-tick {
+	position: absolute;
+	top: var(--dfs-tick-top, 0%);
+	right: 1px;
+	width: 10px;
+	height: 4px;
+	background: rgba(255, 190, 0, 0.9);
+	border-radius: 1px;
+	cursor: pointer;
+	pointer-events: auto;
+}
+
+.dfs-scrollbar-tick:hover {
+	background: rgba(255, 140, 0, 1);
+}
+
+.dfs-scrollbar-tick-current {
+	background: rgba(255, 100, 0, 1);
+	height: 4px;
+	box-shadow: 0 0 3px rgba(255, 100, 0, 0.8);
+}
+
+/* ===== CM6 Match Highlights ===== */
+.dfs-match {
+	background-color: var(--text-highlight-bg, rgba(255, 208, 0, 0.4));
+	border-radius: 2px;
+}
+
+.dfs-match-current {
+	background-color: rgba(255, 140, 0, 0.6);
+	border-radius: 2px;
+	box-shadow: 0 0 0 1px rgba(255, 140, 0, 0.8);
+}
+
+/* ===== Global Search Modal ===== */
+.dfs-global-search-modal {
+	padding: 12px;
+	max-height: 80vh;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+}
+
+.dfs-global-search-modal h3 {
+	margin: 0 0 12px 0;
+}
+
+.dfs-row {
+	display: flex;
+	gap: 8px;
+	margin-bottom: 8px;
+	align-items: center;
+}
+
+.dfs-global-input {
+	flex: 1;
+	padding: 8px 12px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 4px;
+	background: var(--background-primary);
+	color: var(--text-normal);
+	font-size: 14px;
+}
+
+.dfs-btn {
+	padding: 6px 12px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 4px;
+	background: var(--interactive-normal);
+	color: var(--text-normal);
+	cursor: pointer;
+	font-size: 13px;
+	white-space: nowrap;
+}
+
+.dfs-btn:hover {
+	background: var(--interactive-hover);
+}
+
+.dfs-btn-danger:hover {
+	background: var(--background-modifier-error);
+	color: white;
+}
+
+.dfs-options {
+	margin-top: 4px;
+}
+
+.dfs-option-label {
+	font-size: 13px;
+	color: var(--text-muted);
+	cursor: pointer;
+}
+
+.dfs-status {
+	margin: 8px 0;
+	font-size: 13px;
+	color: var(--text-muted);
+}
+
+.dfs-results {
+	overflow-y: auto;
+	max-height: 400px;
+	margin-top: 8px;
+}
+
+.dfs-result-item {
+	padding: 8px 10px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 6px;
+	margin-bottom: 4px;
+	cursor: pointer;
+	transition: background 0.15s;
+	background: var(--background-primary);
+}
+
+.dfs-result-item:hover {
+	background: var(--interactive-accent);
+	color: var(--text-on-accent);
+}
+
+.dfs-result-item:hover .dfs-result-filename,
+.dfs-result-item:hover .dfs-result-count,
+.dfs-result-item:hover .dfs-result-line-num,
+.dfs-result-item:hover .dfs-result-context {
+	color: var(--text-on-accent);
+}
+
+.dfs-result-item:hover .dfs-result-highlight {
+	background: rgba(255, 255, 255, 0.3);
+	color: var(--text-on-accent);
+}
+
+.dfs-result-header {
+	margin-bottom: 4px;
+}
+
+.dfs-result-filename {
+	font-weight: 600;
+	color: var(--text-normal);
+}
+
+.dfs-result-count {
+	font-size: 12px;
+	color: var(--text-muted);
+}
+
+.dfs-result-context {
+	font-size: 12px;
+	color: var(--text-muted);
+	font-family: var(--font-monospace);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.dfs-result-line-num {
+	color: var(--text-faint);
+}
+
+.dfs-result-highlight {
+	background: var(--text-highlight-bg);
+	color: var(--text-normal);
+	padding: 1px 2px;
+	border-radius: 2px;
+	font-weight: 600;
+}
+
+.dfs-result-overflow {
+	padding: 8px;
+	text-align: center;
+	color: var(--text-muted);
+	font-size: 13px;
+}

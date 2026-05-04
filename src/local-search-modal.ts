@@ -1,5 +1,6 @@
 import { App, Editor, MarkdownView } from "obsidian";
 import { EditorView, Decoration, DecorationSet } from "@codemirror/view";
+import type { Range } from "@codemirror/state";
 import { StateEffect, StateField } from "@codemirror/state";
 import { findMatchesIgnoringDiacritics } from "./normalize";
 
@@ -13,11 +14,11 @@ const dfsHighlightField = StateField.define<DecorationSet>({
 		return Decoration.none;
 	},
 	update(decos, tr) {
-		for (const e of tr.effects) {
-			if (e.is(setDFSHighlights)) {
-				const builder: any[] = [];
-				e.value.matches.forEach((m, i) => {
-					if (i === e.value.current) {
+		for (const effect of tr.effects) {
+			if (effect.is(setDFSHighlights)) {
+				const builder: Range<Decoration>[] = [];
+				effect.value.matches.forEach((m, i) => {
+					if (i === effect.value.current) {
 						builder.push(
 							Decoration.mark({ class: "dfs-match-current" }).range(m.start, m.end)
 						);
@@ -28,10 +29,10 @@ const dfsHighlightField = StateField.define<DecorationSet>({
 					}
 				});
 				// Sort by start position (required by CM6)
-				builder.sort((a: any, b: any) => a.from - b.from);
+				builder.sort((a, b) => a.from - b.from);
 				return Decoration.set(builder);
 			}
-			if (e.is(clearDFSHighlights)) {
+			if (effect.is(clearDFSHighlights)) {
 				return Decoration.none;
 			}
 		}
@@ -52,7 +53,6 @@ export class LocalSearchBar {
 	private matches: Array<{ start: number; end: number }> = [];
 	private currentMatchIdx: number = -1;
 	private statusEl: HTMLElement;
-	private styleEl: HTMLStyleElement;
 	private isOpen: boolean = false;
 	private fieldAdded: boolean = false;
 	private scrollbarMarkersEl: HTMLElement | null = null;
@@ -64,7 +64,8 @@ export class LocalSearchBar {
 		this.app = app;
 		this.view = view;
 		this.editor = view.editor;
-		this.cmView = (this.editor as any).cm as EditorView;
+		// Access the CM6 EditorView from Obsidian's editor
+		this.cmView = (this.editor as unknown as { cm: EditorView }).cm;
 	}
 
 	open() {
@@ -76,7 +77,6 @@ export class LocalSearchBar {
 		}
 		this.isOpen = true;
 		this.ensureField();
-		this.addStyles();
 		this.buildUI();
 
 		// Restore last search query
@@ -92,10 +92,10 @@ export class LocalSearchBar {
 		this.searchInput.focus();
 
 		// Global Esc listener — closes bar from anywhere
-		this.escHandler = (e: KeyboardEvent) => {
-			if (e.key === "Escape" && this.isOpen) {
-				e.preventDefault();
-				e.stopPropagation();
+		this.escHandler = (evt: KeyboardEvent) => {
+			if (evt.key === "Escape" && this.isOpen) {
+				evt.preventDefault();
+				evt.stopPropagation();
 				this.close();
 			}
 		};
@@ -125,9 +125,6 @@ export class LocalSearchBar {
 		if (this.containerEl) {
 			this.containerEl.remove();
 		}
-		if (this.styleEl) {
-			this.styleEl.remove();
-		}
 		this.editor.focus();
 	}
 
@@ -139,7 +136,7 @@ export class LocalSearchBar {
 					effects: StateEffect.appendConfig.of([dfsHighlightField]),
 				});
 				this.fieldAdded = true;
-			} catch (e) {
+			} catch {
 				// Field might already exist from a previous instance
 				this.fieldAdded = true;
 			}
@@ -194,20 +191,20 @@ export class LocalSearchBar {
 
 		// Events
 		this.searchInput.addEventListener("input", () => this.doSearch());
-		this.searchInput.addEventListener("keydown", (e) => {
-			if (e.key === "Enter") {
-				if (e.shiftKey) this.navigateMatch(-1);
+		this.searchInput.addEventListener("keydown", (evt) => {
+			if (evt.key === "Enter") {
+				if (evt.shiftKey) this.navigateMatch(-1);
 				else this.navigateMatch(1);
-				e.preventDefault();
+				evt.preventDefault();
 			}
-			if (e.key === "Escape") this.close();
+			if (evt.key === "Escape") this.close();
 		});
-		this.replaceInput.addEventListener("keydown", (e) => {
-			if (e.key === "Enter") {
+		this.replaceInput.addEventListener("keydown", (evt) => {
+			if (evt.key === "Enter") {
 				this.replaceCurrent();
-				e.preventDefault();
+				evt.preventDefault();
 			}
-			if (e.key === "Escape") this.close();
+			if (evt.key === "Escape") this.close();
 		});
 
 		editorContainer.insertBefore(this.containerEl, editorContainer.firstChild);
@@ -256,7 +253,7 @@ export class LocalSearchBar {
 					current: this.currentMatchIdx,
 				}),
 			});
-		} catch (e) {
+		} catch {
 			// Fallback: just select current match
 			this.scrollToCurrentMatch();
 		}
@@ -341,10 +338,8 @@ export class LocalSearchBar {
 		const cmEditor = this.view.contentEl.querySelector(".cm-editor") as HTMLElement;
 		if (!cmEditor) return;
 
-		// Ensure cm-editor is a positioning context
-		if (getComputedStyle(cmEditor).position === "static") {
-			cmEditor.style.position = "relative";
-		}
+		// Ensure cm-editor is a positioning context via CSS class
+		cmEditor.addClass("dfs-cm-editor-relative");
 
 		// Create overlay — fixed to the right edge of cm-editor, over the scrollbar track
 		this.scrollbarMarkersEl = document.createElement("div");
@@ -364,10 +359,10 @@ export class LocalSearchBar {
 			if (i === this.currentMatchIdx) {
 				marker.addClass("dfs-scrollbar-tick-current");
 			}
-			marker.style.top = `${percent}%`;
+			marker.setCssProps({ "--dfs-tick-top": `${percent}%` });
 			const matchIdx = i;
-			marker.addEventListener("click", (e) => {
-				e.stopPropagation();
+			marker.addEventListener("click", (evt) => {
+				evt.stopPropagation();
 				this.currentMatchIdx = matchIdx;
 				this.applyHighlights();
 				this.scrollToCurrentMatch();
@@ -389,126 +384,10 @@ export class LocalSearchBar {
 			this.cmView.dispatch({
 				effects: clearDFSHighlights.of(null),
 			});
-		} catch (e) {
+		} catch {
 			// ignore
 		}
 		const cursor = this.editor.getCursor();
 		this.editor.setSelection(cursor, cursor);
-	}
-
-	private addStyles() {
-		this.styleEl = document.createElement("style");
-		this.styleEl.id = "dfs-local-search-styles";
-		this.styleEl.textContent = `
-			.dfs-search-bar {
-				position: sticky;
-				top: 0;
-				z-index: 100;
-				background: var(--background-secondary);
-				border-bottom: 1px solid var(--background-modifier-border);
-				padding: 6px 10px;
-				display: flex;
-				flex-direction: column;
-				gap: 4px;
-			}
-			.dfs-bar-row {
-				display: flex;
-				gap: 6px;
-				align-items: center;
-			}
-			.dfs-bar-input {
-				flex: 1;
-				padding: 4px 8px;
-				border: 1px solid var(--background-modifier-border);
-				border-radius: 4px;
-				background: var(--background-primary);
-				color: var(--text-normal);
-				font-size: 13px;
-				min-width: 0;
-			}
-			.dfs-bar-input:focus {
-				border-color: var(--interactive-accent);
-				outline: none;
-			}
-			.dfs-bar-status {
-				font-size: 12px;
-				color: var(--text-muted);
-				min-width: 40px;
-				text-align: center;
-			}
-			.dfs-bar-btn {
-				padding: 2px 6px;
-				border: 1px solid var(--background-modifier-border);
-				border-radius: 4px;
-				background: var(--interactive-normal);
-				color: var(--text-normal);
-				cursor: pointer;
-				font-size: 12px;
-				line-height: 1.4;
-			}
-			.dfs-bar-btn:hover {
-				background: var(--interactive-hover);
-			}
-			.dfs-bar-btn-text {
-				font-size: 12px;
-				padding: 2px 8px;
-			}
-			.dfs-bar-close {
-				font-size: 14px;
-				padding: 2px 6px;
-			}
-			.dfs-bar-close:hover {
-				background: var(--background-modifier-error);
-				color: white;
-			}
-			.dfs-bar-option {
-				font-size: 12px;
-				color: var(--text-muted);
-				cursor: pointer;
-				display: flex;
-				align-items: center;
-				gap: 2px;
-				white-space: nowrap;
-			}
-			/* Scrollbar match markers */
-			.dfs-scrollbar-markers {
-				position: absolute;
-				top: 0;
-				right: 0;
-				bottom: 0;
-				width: 12px;
-				pointer-events: none;
-				z-index: 300;
-			}
-			.dfs-scrollbar-tick {
-				position: absolute;
-				right: 1px;
-				width: 10px;
-				height: 4px;
-				background: rgba(255, 190, 0, 0.9);
-				border-radius: 1px;
-				cursor: pointer;
-				pointer-events: auto;
-			}
-			.dfs-scrollbar-tick:hover {
-				background: rgba(255, 140, 0, 1);
-			}
-			.dfs-scrollbar-tick-current {
-				background: rgba(255, 100, 0, 1);
-				height: 4px;
-				box-shadow: 0 0 3px rgba(255, 100, 0, 0.8);
-			}
-			/* CM6 match highlights */
-			.dfs-match {
-				background-color: var(--text-highlight-bg, rgba(255, 208, 0, 0.4));
-				border-radius: 2px;
-			}
-			.dfs-match-current {
-				background-color: rgba(255, 140, 0, 0.6);
-				border-radius: 2px;
-				box-shadow: 0 0 0 1px rgba(255, 140, 0, 0.8);
-			}
-		`;
-		document.head.appendChild(this.styleEl);
 	}
 }

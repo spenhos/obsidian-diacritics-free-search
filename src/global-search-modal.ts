@@ -1,10 +1,10 @@
 import { App, MarkdownView, Modal, TFile } from "obsidian";
-import { findMatchesIgnoringDiacritics, stripDiacritics } from "./normalize";
+import { findMatchesIgnoringDiacritics } from "./normalize";
 
 interface SearchResult {
 	file: TFile;
 	matches: Array<{ start: number; end: number }>;
-	contextParts: Array<{ text: string; highlight: boolean }>; // pre-split for highlighting
+	contextParts: Array<{ text: string; highlight: boolean }>;
 	lineNumber: number;
 	matchCount: number;
 }
@@ -26,7 +26,7 @@ export class GlobalSearchModal extends Modal {
 		const { contentEl } = this;
 		contentEl.addClass("dfs-global-search-modal");
 
-		contentEl.createEl("h3", { text: "Global Search (diacritics-free)" });
+		contentEl.createEl("h3", { text: "Global search (diacritics-free)" });
 
 		// Search input
 		const searchRow = contentEl.createDiv({ cls: "dfs-row" });
@@ -45,10 +45,12 @@ export class GlobalSearchModal extends Modal {
 			cls: "dfs-search-input dfs-global-input",
 		});
 		const replaceAllBtn = replaceRow.createEl("button", {
-			text: "Replace All",
+			text: "Replace all",
 			cls: "dfs-btn dfs-btn-danger",
 		});
-		replaceAllBtn.addEventListener("click", () => this.replaceAllGlobal());
+		replaceAllBtn.addEventListener("click", () => {
+			void this.replaceAllGlobal();
+		});
 
 		// Options
 		const optionsRow = contentEl.createDiv({ cls: "dfs-row dfs-options" });
@@ -57,7 +59,7 @@ export class GlobalSearchModal extends Modal {
 		caseLabel.appendText(" Case sensitive");
 		caseCheckbox.addEventListener("change", () => {
 			this.caseSensitive = caseCheckbox.checked;
-			this.doGlobalSearch();
+			void this.doGlobalSearch();
 		});
 
 		// Status
@@ -69,22 +71,22 @@ export class GlobalSearchModal extends Modal {
 		// Events
 		this.searchInput.addEventListener("input", () => {
 			if (this.debounceTimer) clearTimeout(this.debounceTimer);
-			this.debounceTimer = window.setTimeout(() => this.doGlobalSearch(), 300);
+			this.debounceTimer = window.setTimeout(() => {
+				void this.doGlobalSearch();
+			}, 300);
 		});
-		this.searchInput.addEventListener("keydown", (e) => {
-			if (e.key === "Escape") this.close();
+		this.searchInput.addEventListener("keydown", (evt) => {
+			if (evt.key === "Escape") this.close();
 		});
-
-		this.addStyles();
 	}
 
 	private async doGlobalSearch() {
-		const query = this.searchInput.value.trim();
+		const searchQuery = this.searchInput.value.trim();
 		this.results = [];
 		this.resultsContainer.empty();
 
-		if (!query || query.length < 2) {
-			this.statusEl.setText(query ? "Type at least 2 characters" : "");
+		if (!searchQuery || searchQuery.length < 2) {
+			this.statusEl.setText(searchQuery ? "Type at least 2 characters" : "");
 			return;
 		}
 
@@ -95,7 +97,7 @@ export class GlobalSearchModal extends Modal {
 
 		for (const file of files) {
 			const content = await this.app.vault.cachedRead(file);
-			const matches = findMatchesIgnoringDiacritics(content, query, this.caseSensitive);
+			const matches = findMatchesIgnoringDiacritics(content, searchQuery, this.caseSensitive);
 
 			if (matches.length > 0) {
 				totalMatches += matches.length;
@@ -112,8 +114,7 @@ export class GlobalSearchModal extends Modal {
 					content.substring(0, firstMatch.start).split("\n").length;
 
 				// Build highlighted context parts
-				// Find matches within this line for highlighting
-				const contextParts = this.buildHighlightedContext(lineText, query);
+				const contextParts = this.buildHighlightedContext(lineText, searchQuery);
 
 				this.results.push({
 					file,
@@ -162,7 +163,6 @@ export class GlobalSearchModal extends Modal {
 
 	private renderResults() {
 		this.resultsContainer.empty();
-		const query = this.searchInput.value.trim();
 
 		for (const result of this.results.slice(0, 50)) {
 			const resultEl = this.resultsContainer.createDiv({ cls: "dfs-result-item" });
@@ -208,7 +208,7 @@ export class GlobalSearchModal extends Modal {
 
 				// Use activeLeaf or create new
 				const leaf = this.app.workspace.getLeaf(false);
-				leaf.openFile(file).then(() => {
+				void leaf.openFile(file).then(() => {
 					setTimeout(() => {
 						const view = this.app.workspace.getActiveViewOfType(MarkdownView);
 						if (view) {
@@ -278,135 +278,7 @@ export class GlobalSearchModal extends Modal {
 		return { line, ch };
 	}
 
-	private addStyles() {
-		const style = document.createElement("style");
-		style.id = "dfs-global-search-styles";
-		style.textContent = `
-			.dfs-global-search-modal {
-				padding: 12px;
-				max-height: 80vh;
-				overflow: hidden;
-				display: flex;
-				flex-direction: column;
-			}
-			.dfs-global-search-modal h3 {
-				margin: 0 0 12px 0;
-			}
-			.dfs-row {
-				display: flex;
-				gap: 8px;
-				margin-bottom: 8px;
-				align-items: center;
-			}
-			.dfs-global-input {
-				flex: 1;
-				padding: 8px 12px;
-				border: 1px solid var(--background-modifier-border);
-				border-radius: 4px;
-				background: var(--background-primary);
-				color: var(--text-normal);
-				font-size: 14px;
-			}
-			.dfs-btn {
-				padding: 6px 12px;
-				border: 1px solid var(--background-modifier-border);
-				border-radius: 4px;
-				background: var(--interactive-normal);
-				color: var(--text-normal);
-				cursor: pointer;
-				font-size: 13px;
-				white-space: nowrap;
-			}
-			.dfs-btn:hover {
-				background: var(--interactive-hover);
-			}
-			.dfs-btn-danger:hover {
-				background: var(--background-modifier-error);
-				color: white;
-			}
-			.dfs-options {
-				margin-top: 4px;
-			}
-			.dfs-option-label {
-				font-size: 13px;
-				color: var(--text-muted);
-				cursor: pointer;
-			}
-			.dfs-status {
-				margin: 8px 0;
-				font-size: 13px;
-				color: var(--text-muted);
-			}
-			.dfs-results {
-				overflow-y: auto;
-				max-height: 400px;
-				margin-top: 8px;
-			}
-			.dfs-result-item {
-				padding: 8px 10px;
-				border: 1px solid var(--background-modifier-border);
-				border-radius: 6px;
-				margin-bottom: 4px;
-				cursor: pointer;
-				transition: background 0.15s;
-				background: var(--background-primary);
-			}
-			.dfs-result-item:hover {
-				background: var(--interactive-accent);
-				color: var(--text-on-accent);
-			}
-			.dfs-result-item:hover .dfs-result-filename,
-			.dfs-result-item:hover .dfs-result-count,
-			.dfs-result-item:hover .dfs-result-line-num,
-			.dfs-result-item:hover .dfs-result-context {
-				color: var(--text-on-accent);
-			}
-			.dfs-result-item:hover .dfs-result-highlight {
-				background: rgba(255, 255, 255, 0.3);
-				color: var(--text-on-accent);
-			}
-			.dfs-result-header {
-				margin-bottom: 4px;
-			}
-			.dfs-result-filename {
-				font-weight: 600;
-				color: var(--text-normal);
-			}
-			.dfs-result-count {
-				font-size: 12px;
-				color: var(--text-muted);
-			}
-			.dfs-result-context {
-				font-size: 12px;
-				color: var(--text-muted);
-				font-family: var(--font-monospace);
-				overflow: hidden;
-				text-overflow: ellipsis;
-				white-space: nowrap;
-			}
-			.dfs-result-line-num {
-				color: var(--text-faint);
-			}
-			.dfs-result-highlight {
-				background: var(--text-highlight-bg);
-				color: var(--text-normal);
-				padding: 1px 2px;
-				border-radius: 2px;
-				font-weight: 600;
-			}
-			.dfs-result-overflow {
-				padding: 8px;
-				text-align: center;
-				color: var(--text-muted);
-				font-size: 13px;
-			}
-		`;
-		document.head.appendChild(style);
-	}
-
 	onClose() {
-		const style = document.getElementById("dfs-global-search-styles");
-		if (style) style.remove();
 		this.contentEl.empty();
 	}
 }

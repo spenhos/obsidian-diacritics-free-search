@@ -22,8 +22,7 @@ export default class DiacriticsFreeSearchPlugin extends Plugin {
 		// Command: Local search (in active note)
 		this.addCommand({
 			id: "dfs-local-search",
-			name: "Find & Replace in current note (diacritics-free)",
-			hotkeys: [{ modifiers: ["Alt"], key: "f" }],
+			name: "Find and replace in current note (diacritics-free)",
 			editorCallback: (editor, view) => {
 				if (view instanceof MarkdownView) {
 					let bar = searchBars.get(view);
@@ -40,7 +39,6 @@ export default class DiacriticsFreeSearchPlugin extends Plugin {
 		this.addCommand({
 			id: "dfs-global-search",
 			name: "Search entire vault (diacritics-free)",
-			hotkeys: [{ modifiers: ["Alt", "Shift"], key: "f" }],
 			callback: () => {
 				new GlobalSearchModal(this.app).open();
 			},
@@ -73,7 +71,9 @@ class DFSSettingTab extends PluginSettingTab {
 		const { containerEl } = this;
 		containerEl.empty();
 
-		containerEl.createEl("h2", { text: "Diacritics-Free Search" });
+		new Setting(containerEl)
+			.setName("Diacritics-free search")
+			.setHeading();
 
 		containerEl.createEl("p", {
 			text: "Search and replace text ignoring diacritical marks. Supports Hebrew nikud, Arabic tashkil, Latin accents, and all other Unicode combining marks.",
@@ -91,7 +91,10 @@ class DFSSettingTab extends PluginSettingTab {
 					})
 			);
 
-		containerEl.createEl("h3", { text: "Supported scripts" });
+		new Setting(containerEl)
+			.setName("Supported scripts")
+			.setHeading();
+
 		const list = containerEl.createEl("ul");
 		const scripts = [
 			"Hebrew (nikud & cantillation marks)",
