@@ -36,7 +36,7 @@ Search query:    بسم            →  Finds:  بِسْمِ ✓
 <table>
 <tr>
 <td width="120"><strong>Shortcut</strong></td>
-<td><kbd>Option</kbd> + <kbd>F</kbd></td>
+<td><kbd>Option</kbd> + <kbd>F</kbd> <em>(suggested — assign in Settings → Hotkeys)</em></td>
 </tr>
 <tr>
 <td><strong>Behavior</strong></td>
@@ -61,7 +61,7 @@ Search query:    بسم            →  Finds:  بِسْمِ ✓
 <table>
 <tr>
 <td width="120"><strong>Shortcut</strong></td>
-<td><kbd>Shift</kbd> + <kbd>Option</kbd> + <kbd>F</kbd></td>
+<td><kbd>Shift</kbd> + <kbd>Option</kbd> + <kbd>F</kbd> <em>(suggested — assign in Settings → Hotkeys)</em></td>
 </tr>
 <tr>
 <td><strong>Behavior</strong></td>
@@ -102,8 +102,8 @@ The plugin uses Unicode NFD normalization to decompose characters, then removes 
 
 | Action | Shortcut |
 |--------|----------|
-| Open local search | <kbd>Option</kbd> + <kbd>F</kbd> |
-| Open global search | <kbd>Shift</kbd> + <kbd>Option</kbd> + <kbd>F</kbd> |
+| Open local search | <kbd>Option</kbd> + <kbd>F</kbd> *(suggested — assign in Settings → Hotkeys)* |
+| Open global search | <kbd>Shift</kbd> + <kbd>Option</kbd> + <kbd>F</kbd> *(suggested — assign in Settings → Hotkeys)* |
 | Next match | <kbd>Enter</kbd> or ▼ button |
 | Previous match | <kbd>Shift</kbd> + <kbd>Enter</kbd> or ▲ button |
 | Close search | <kbd>Esc</kbd> (works from anywhere) |

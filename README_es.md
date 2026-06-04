@@ -36,7 +36,7 @@ Búsqueda:    بسم            →  Encuentra:  بِسْمِ ✓
 <table>
 <tr>
 <td width="120"><strong>Atajo</strong></td>
-<td><kbd>Option</kbd> + <kbd>F</kbd></td>
+<td><kbd>Option</kbd> + <kbd>F</kbd> <em>(sugerido — asígnalo en Ajustes → Atajos de teclado)</em></td>
 </tr>
 <tr>
 <td><strong>Comportamiento</strong></td>
@@ -61,7 +61,7 @@ Búsqueda:    بسم            →  Encuentra:  بِسْمِ ✓
 <table>
 <tr>
 <td width="120"><strong>Atajo</strong></td>
-<td><kbd>Shift</kbd> + <kbd>Option</kbd> + <kbd>F</kbd></td>
+<td><kbd>Shift</kbd> + <kbd>Option</kbd> + <kbd>F</kbd> <em>(sugerido — asígnalo en Ajustes → Atajos de teclado)</em></td>
 </tr>
 <tr>
 <td><strong>Comportamiento</strong></td>
@@ -102,8 +102,8 @@ El plugin usa normalización Unicode NFD para descomponer caracteres y luego eli
 
 | Acción | Atajo |
 |--------|-------|
-| Abrir búsqueda local | <kbd>Option</kbd> + <kbd>F</kbd> |
-| Abrir búsqueda global | <kbd>Shift</kbd> + <kbd>Option</kbd> + <kbd>F</kbd> |
+| Abrir búsqueda local | <kbd>Option</kbd> + <kbd>F</kbd> *(sugerido — asígnalo en Ajustes → Atajos de teclado)* |
+| Abrir búsqueda global | <kbd>Shift</kbd> + <kbd>Option</kbd> + <kbd>F</kbd> *(sugerido — asígnalo en Ajustes → Atajos de teclado)* |
 | Siguiente coincidencia | <kbd>Enter</kbd> o botón ▼ |
 | Coincidencia anterior | <kbd>Shift</kbd> + <kbd>Enter</kbd> o botón ▲ |
 | Cerrar búsqueda | <kbd>Esc</kbd> (funciona desde cualquier lugar) |

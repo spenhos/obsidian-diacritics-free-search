@@ -26,7 +26,7 @@ export class GlobalSearchModal extends Modal {
 		const { contentEl } = this;
 		contentEl.addClass("dfs-global-search-modal");
 
-		contentEl.createEl("h3", { text: "Global search" });
+		this.titleEl.setText("Global search");
 
 		// Search input
 		const searchRow = contentEl.createDiv({ cls: "dfs-row" });
@@ -70,7 +70,7 @@ export class GlobalSearchModal extends Modal {
 
 		// Events
 		this.searchInput.addEventListener("input", () => {
-			if (this.debounceTimer) clearTimeout(this.debounceTimer);
+			if (this.debounceTimer) window.clearTimeout(this.debounceTimer);
 			this.debounceTimer = window.setTimeout(() => {
 				void this.doGlobalSearch();
 			}, 300);
@@ -209,7 +209,7 @@ export class GlobalSearchModal extends Modal {
 				// Use activeLeaf or create new
 				const leaf = this.app.workspace.getLeaf(false);
 				void leaf.openFile(file).then(() => {
-					setTimeout(() => {
+					window.setTimeout(() => {
 						const view = this.app.workspace.getActiveViewOfType(MarkdownView);
 						if (view) {
 							const editor = view.editor;

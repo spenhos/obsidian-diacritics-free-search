@@ -23,7 +23,7 @@ export default class DiacriticsFreeSearchPlugin extends Plugin {
 		this.addCommand({
 			id: "dfs-local-search",
 			name: "Find and replace in current note (diacritics-free)",
-			editorCallback: (editor, view) => {
+			editorCallback: (_editor, view) => {
 				if (view instanceof MarkdownView) {
 					let bar = searchBars.get(view);
 					if (!bar) {
@@ -51,7 +51,8 @@ export default class DiacriticsFreeSearchPlugin extends Plugin {
 	onunload() {}
 
 	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		const data = (await this.loadData()) as Partial<DFSSettings> | null;
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, data);
 	}
 
 	async saveSettings() {
@@ -77,9 +78,9 @@ class DFSSettingTab extends PluginSettingTab {
 			.addToggle((toggle) =>
 				toggle
 					.setValue(this.plugin.settings.caseSensitive)
-					.onChange(async (value) => {
+					.onChange((value) => {
 						this.plugin.settings.caseSensitive = value;
-						await this.plugin.saveSettings();
+						void this.plugin.saveSettings();
 					})
 			);
 	}

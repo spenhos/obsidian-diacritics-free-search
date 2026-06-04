@@ -59,6 +59,7 @@ export class LocalSearchBar {
 	private lastQuery: string = "";
 	private lastReplace: string = "";
 	private escHandler: ((e: KeyboardEvent) => void) | null = null;
+	private escDoc: Document | null = null;
 
 	constructor(app: App, view: MarkdownView) {
 		this.app = app;
@@ -99,7 +100,9 @@ export class LocalSearchBar {
 				this.close();
 			}
 		};
-		document.addEventListener("keydown", this.escHandler, true);
+		// Use the view's own document so it also works in popout windows
+		this.escDoc = this.view.containerEl.ownerDocument;
+		this.escDoc.addEventListener("keydown", this.escHandler, true);
 	}
 
 	close() {
@@ -114,9 +117,10 @@ export class LocalSearchBar {
 		}
 
 		// Remove global Esc listener
-		if (this.escHandler) {
-			document.removeEventListener("keydown", this.escHandler, true);
+		if (this.escHandler && this.escDoc) {
+			this.escDoc.removeEventListener("keydown", this.escHandler, true);
 			this.escHandler = null;
+			this.escDoc = null;
 		}
 
 		this.isOpen = false;
@@ -145,8 +149,7 @@ export class LocalSearchBar {
 
 	private buildUI() {
 		const editorContainer = this.view.contentEl;
-		this.containerEl = document.createElement("div");
-		this.containerEl.addClass("dfs-search-bar");
+		this.containerEl = editorContainer.createDiv({ cls: "dfs-search-bar" });
 
 		// Row 1: Search
 		const searchRow = this.containerEl.createDiv({ cls: "dfs-bar-row" });
@@ -342,9 +345,8 @@ export class LocalSearchBar {
 		cmEditor.addClass("dfs-cm-editor-relative");
 
 		// Create overlay — fixed to the right edge of cm-editor, over the scrollbar track
-		this.scrollbarMarkersEl = document.createElement("div");
-		this.scrollbarMarkersEl.addClass("dfs-scrollbar-markers");
-		cmEditor.appendChild(this.scrollbarMarkersEl);
+		const markersEl = cmEditor.createDiv({ cls: "dfs-scrollbar-markers" });
+		this.scrollbarMarkersEl = markersEl;
 
 		const content = this.editor.getValue();
 		const totalLines = content.split("\n").length;
@@ -354,8 +356,7 @@ export class LocalSearchBar {
 			const linesBeforeMatch = content.substring(0, match.start).split("\n").length - 1;
 			const percent = (linesBeforeMatch / totalLines) * 100;
 
-			const marker = document.createElement("div");
-			marker.addClass("dfs-scrollbar-tick");
+			const marker = markersEl.createDiv({ cls: "dfs-scrollbar-tick" });
 			if (i === this.currentMatchIdx) {
 				marker.addClass("dfs-scrollbar-tick-current");
 			}
@@ -368,7 +369,6 @@ export class LocalSearchBar {
 				this.scrollToCurrentMatch();
 				this.updateStatus();
 			});
-			this.scrollbarMarkersEl.appendChild(marker);
 		}
 	}
 

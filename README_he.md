@@ -36,7 +36,7 @@
 <table>
 <tr>
 <td width="120"><strong>קיצור</strong></td>
-<td><kbd>Option</kbd> + <kbd>F</kbd></td>
+<td><kbd>Option</kbd> + <kbd>F</kbd> <em>(מומלץ — הקצו בהגדרות ← קיצורי מקלדת)</em></td>
 </tr>
 <tr>
 <td><strong>התנהגות</strong></td>
@@ -61,7 +61,7 @@
 <table>
 <tr>
 <td width="120"><strong>קיצור</strong></td>
-<td><kbd>Shift</kbd> + <kbd>Option</kbd> + <kbd>F</kbd></td>
+<td><kbd>Shift</kbd> + <kbd>Option</kbd> + <kbd>F</kbd> <em>(מומלץ — הקצו בהגדרות ← קיצורי מקלדת)</em></td>
 </tr>
 <tr>
 <td><strong>התנהגות</strong></td>
@@ -102,8 +102,8 @@
 
 | פעולה | קיצור |
 |-------|-------|
-| פתח חיפוש מקומי | <kbd>Option</kbd> + <kbd>F</kbd> |
-| פתח חיפוש גלובלי | <kbd>Shift</kbd> + <kbd>Option</kbd> + <kbd>F</kbd> |
+| פתח חיפוש מקומי | <kbd>Option</kbd> + <kbd>F</kbd> *(מומלץ — הקצו בהגדרות ← קיצורי מקלדת)* |
+| פתח חיפוש גלובלי | <kbd>Shift</kbd> + <kbd>Option</kbd> + <kbd>F</kbd> *(מומלץ — הקצו בהגדרות ← קיצורי מקלדת)* |
 | התאמה הבאה | <kbd>Enter</kbd> או כפתור ▼ |
 | התאמה קודמת | <kbd>Shift</kbd> + <kbd>Enter</kbd> או כפתור ▲ |
 | סגור חיפוש | <kbd>Esc</kbd> (עובד מכל מקום) |
