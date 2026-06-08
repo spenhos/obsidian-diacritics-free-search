@@ -158,6 +158,14 @@ npm run build
 
 ---
 
+## תמיכה
+
+אם התוסף הזה מועיל לכם, תוכלו לתמוך בפיתוחו:
+
+[![חסות ב-GitHub](https://img.shields.io/badge/%D7%97%D7%A1%D7%95%D7%AA-%E2%9D%A4-db61a2?logo=github&style=for-the-badge)](https://github.com/sponsors/spenhos)
+
+---
+
 ## תרומה
 
 Issues ו-PRs מתקבלים בברכה! אם מצאת כתב או שפה שבהם סימנים דיאקריטיים לא מוסרים כראוי, אנא [פתח issue](https://github.com/spenhos/obsidian-diacritics-free-search/issues) עם דוגמה.

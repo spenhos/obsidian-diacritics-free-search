@@ -158,6 +158,14 @@ Copy `main.js` + `manifest.json` to your vault's plugin folder.
 
 ---
 
+## Support
+
+If this plugin is useful to you, you can support its development:
+
+[![Sponsor on GitHub](https://img.shields.io/badge/Sponsor-%E2%9D%A4-db61a2?logo=github&style=for-the-badge)](https://github.com/sponsors/spenhos)
+
+---
+
 ## Contributing
 
 Issues and PRs are welcome! If you find a script or language where diacritics aren't being properly stripped, please [open an issue](https://github.com/spenhos/obsidian-diacritics-free-search/issues) with an example.

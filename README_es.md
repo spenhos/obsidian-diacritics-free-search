@@ -158,6 +158,14 @@ Copia `main.js` + `manifest.json` a la carpeta de plugins de tu vault.
 
 ---
 
+## Apoyar
+
+Si este plugin te resulta útil, puedes apoyar su desarrollo:
+
+[![Patrocinar en GitHub](https://img.shields.io/badge/Patrocinar-%E2%9D%A4-db61a2?logo=github&style=for-the-badge)](https://github.com/sponsors/spenhos)
+
+---
+
 ## Contribuir
 
 ¡Issues y PRs son bienvenidos! Si encuentras una escritura o idioma donde los diacríticos no se eliminan correctamente, por favor [abre un issue](https://github.com/spenhos/obsidian-diacritics-free-search/issues) con un ejemplo.
