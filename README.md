@@ -132,6 +132,14 @@ Both commands are also available via the **Command Palette** (<kbd>Cmd</kbd> + <
 
 ## Installation
 
+### From Obsidian (recommended)
+
+1. Open **Settings → Community Plugins** in Obsidian
+2. Click **Browse** and search for **"Diacritics-Free Search"**
+3. Click **Install**, then **Enable**
+
+Or install in one click: [**Open in Obsidian →**](https://obsidian.md/plugins?id=diacritics-free-search)
+
 ### Manual Installation
 
 1. Download `main.js` and `manifest.json` from the [latest release](https://github.com/spenhos/obsidian-diacritics-free-search/releases)
