@@ -1,7 +1,7 @@
 {
 	"id": "diacritics-free-search",
 	"name": "Diacritics-Free Search",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"minAppVersion": "0.16.0",
 	"description": "Search and replace ignoring diacritics — Hebrew nikud, Arabic tashkil, Latin accents, and more. Works in active note and vault-wide.",
 	"author": "Saleh Penhos",
