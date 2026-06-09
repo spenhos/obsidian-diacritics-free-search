@@ -1,5 +1,6 @@
 import { App, MarkdownView, Modal, TFile } from "obsidian";
 import { findMatchesIgnoringDiacritics } from "./normalize";
+import { t } from "./i18n";
 
 interface SearchResult {
 	file: TFile;
@@ -26,13 +27,13 @@ export class GlobalSearchModal extends Modal {
 		const { contentEl } = this;
 		contentEl.addClass("dfs-global-search-modal");
 
-		this.titleEl.setText("Global search");
+		this.titleEl.setText(t("globalSearch"));
 
 		// Search input
 		const searchRow = contentEl.createDiv({ cls: "dfs-row" });
 		this.searchInput = searchRow.createEl("input", {
 			type: "text",
-			placeholder: "Search across all notes...",
+			placeholder: t("globalSearchPlaceholder"),
 			cls: "dfs-search-input dfs-global-input",
 		});
 		this.searchInput.focus();
@@ -41,11 +42,11 @@ export class GlobalSearchModal extends Modal {
 		const replaceRow = contentEl.createDiv({ cls: "dfs-row" });
 		this.replaceInput = replaceRow.createEl("input", {
 			type: "text",
-			placeholder: "Replace with... (optional)",
+			placeholder: t("replaceOptionalPlaceholder"),
 			cls: "dfs-search-input dfs-global-input",
 		});
 		const replaceAllBtn = replaceRow.createEl("button", {
-			text: "Replace all",
+			text: t("replaceAll"),
 			cls: "dfs-btn dfs-btn-danger",
 		});
 		replaceAllBtn.addEventListener("click", () => {
@@ -56,7 +57,7 @@ export class GlobalSearchModal extends Modal {
 		const optionsRow = contentEl.createDiv({ cls: "dfs-row dfs-options" });
 		const caseLabel = optionsRow.createEl("label", { cls: "dfs-option-label" });
 		const caseCheckbox = caseLabel.createEl("input", { type: "checkbox" });
-		caseLabel.appendText(" Case sensitive");
+		caseLabel.appendText(" " + t("caseSensitiveOption"));
 		caseCheckbox.addEventListener("change", () => {
 			this.caseSensitive = caseCheckbox.checked;
 			void this.doGlobalSearch();
@@ -86,11 +87,11 @@ export class GlobalSearchModal extends Modal {
 		this.resultsContainer.empty();
 
 		if (!searchQuery || searchQuery.length < 2) {
-			this.statusEl.setText(searchQuery ? "Type at least 2 characters" : "");
+			this.statusEl.setText(searchQuery ? t("typeAtLeast") : "");
 			return;
 		}
 
-		this.statusEl.setText("Searching...");
+		this.statusEl.setText(t("searching"));
 
 		const files = this.app.vault.getMarkdownFiles();
 		let totalMatches = 0;
@@ -127,7 +128,7 @@ export class GlobalSearchModal extends Modal {
 		}
 
 		this.statusEl.setText(
-			`${totalMatches} matches in ${this.results.length} files`
+			t("matchesInFiles", { matches: totalMatches, files: this.results.length })
 		);
 		this.renderResults();
 	}
@@ -226,7 +227,7 @@ export class GlobalSearchModal extends Modal {
 
 		if (this.results.length > 50) {
 			this.resultsContainer.createDiv({
-				text: `... and ${this.results.length - 50} more files`,
+				text: t("andMoreFiles", { count: this.results.length - 50 }),
 				cls: "dfs-result-overflow",
 			});
 		}
@@ -258,7 +259,7 @@ export class GlobalSearchModal extends Modal {
 		}
 
 		this.statusEl.setText(
-			`Replaced ${totalReplaced} occurrences in ${this.results.length} files`
+			t("replacedOccurrences", { count: totalReplaced, files: this.results.length })
 		);
 		this.results = [];
 		this.resultsContainer.empty();

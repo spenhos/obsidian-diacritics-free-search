@@ -1,6 +1,7 @@
 import { App, Editor, MarkdownView } from "obsidian";
 import { EditorView, Decoration, DecorationSet } from "@codemirror/view";
 import type { Range } from "@codemirror/state";
+import { t } from "./i18n";
 import { StateEffect, StateField } from "@codemirror/state";
 import { findMatchesIgnoringDiacritics } from "./normalize";
 
@@ -156,14 +157,14 @@ export class LocalSearchBar {
 
 		this.searchInput = searchRow.createEl("input", {
 			type: "text",
-			placeholder: "Search (diacritics-free)...",
+			placeholder: t("searchPlaceholder"),
 			cls: "dfs-bar-input",
 		});
 
 		this.statusEl = searchRow.createSpan({ cls: "dfs-bar-status" });
 
-		const prevBtn = searchRow.createEl("button", { text: "▲", cls: "dfs-bar-btn", attr: { "aria-label": "Previous" } });
-		const nextBtn = searchRow.createEl("button", { text: "▼", cls: "dfs-bar-btn", attr: { "aria-label": "Next" } });
+		const prevBtn = searchRow.createEl("button", { text: "▲", cls: "dfs-bar-btn", attr: { "aria-label": t("prev") } });
+		const nextBtn = searchRow.createEl("button", { text: "▼", cls: "dfs-bar-btn", attr: { "aria-label": t("next") } });
 		prevBtn.addEventListener("click", () => this.navigateMatch(-1));
 		nextBtn.addEventListener("click", () => this.navigateMatch(1));
 
@@ -175,7 +176,7 @@ export class LocalSearchBar {
 			this.doSearch();
 		});
 
-		const closeBtn = searchRow.createEl("button", { text: "✕", cls: "dfs-bar-btn dfs-bar-close", attr: { "aria-label": "Close" } });
+		const closeBtn = searchRow.createEl("button", { text: "✕", cls: "dfs-bar-btn dfs-bar-close", attr: { "aria-label": t("close") } });
 		closeBtn.addEventListener("click", () => this.close());
 
 		// Row 2: Replace
@@ -183,12 +184,12 @@ export class LocalSearchBar {
 
 		this.replaceInput = replaceRow.createEl("input", {
 			type: "text",
-			placeholder: "Replace with...",
+			placeholder: t("replacePlaceholder"),
 			cls: "dfs-bar-input",
 		});
 
-		const replaceOneBtn = replaceRow.createEl("button", { text: "Replace", cls: "dfs-bar-btn dfs-bar-btn-text" });
-		const replaceAllBtn = replaceRow.createEl("button", { text: "All", cls: "dfs-bar-btn dfs-bar-btn-text" });
+		const replaceOneBtn = replaceRow.createEl("button", { text: t("replace"), cls: "dfs-bar-btn dfs-bar-btn-text" });
+		const replaceAllBtn = replaceRow.createEl("button", { text: t("all"), cls: "dfs-bar-btn dfs-bar-btn-text" });
 		replaceOneBtn.addEventListener("click", () => this.replaceCurrent());
 		replaceAllBtn.addEventListener("click", () => this.replaceAll());
 
@@ -304,7 +305,7 @@ export class LocalSearchBar {
 
 		this.editor.setValue(newContent);
 		this.clearHighlights();
-		this.statusEl.setText(`Replaced ${count}`);
+		this.statusEl.setText(t("replaced", { count }));
 		this.matches = [];
 		this.currentMatchIdx = -1;
 	}
