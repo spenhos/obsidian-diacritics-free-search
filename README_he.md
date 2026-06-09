@@ -8,6 +8,7 @@
 
 [![GitHub release](https://img.shields.io/github/v/release/spenhos/obsidian-diacritics-free-search?style=flat-square)](https://github.com/spenhos/obsidian-diacritics-free-search/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](./LICENSE)
+[![Ko-fi](https://img.shields.io/badge/Support-Ko--fi-FF5E5B?style=flat-square&logo=ko-fi&logoColor=white)](https://ko-fi.com/elevalma)
 
 🌐 [English](./README.md) | [Español](./README_es.md) | עברית | [العربية](./README_ar.md) | [Français](./README_fr.md) | [Русский](./README_ru.md) | [Português](./README_pt.md)
 
@@ -161,6 +162,8 @@ npm run build
 ## תמיכה
 
 אם התוסף הזה מועיל לכם, תוכלו לתמוך בפיתוחו:
+
+[![תמכו ב-Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/elevalma)
 
 [![חסות ב-GitHub](https://img.shields.io/badge/%D7%97%D7%A1%D7%95%D7%AA-%E2%9D%A4-db61a2?logo=github&style=for-the-badge)](https://github.com/sponsors/spenhos)
 

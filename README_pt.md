@@ -8,6 +8,7 @@ Nikud hebraico · Tashkil árabe · Acentos latinos · Grego politônico · Qual
 
 [![GitHub release](https://img.shields.io/github/v/release/spenhos/obsidian-diacritics-free-search?style=flat-square)](https://github.com/spenhos/obsidian-diacritics-free-search/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](./LICENSE)
+[![Ko-fi](https://img.shields.io/badge/Support-Ko--fi-FF5E5B?style=flat-square&logo=ko-fi&logoColor=white)](https://ko-fi.com/elevalma)
 
 🌐 [English](./README.md) | [Español](./README_es.md) | [עברית](./README_he.md) | [العربية](./README_ar.md) | [Français](./README_fr.md) | [Русский](./README_ru.md) | Português
 
@@ -161,6 +162,8 @@ Copie `main.js` + `manifest.json` para a pasta de plugins do seu cofre.
 ## Apoiar
 
 Se este plugin é útil para você, você pode apoiar seu desenvolvimento:
+
+[![Apoie no Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/elevalma)
 
 [![Apoiar no GitHub](https://img.shields.io/badge/Apoiar-%E2%9D%A4-db61a2?logo=github&style=for-the-badge)](https://github.com/sponsors/spenhos)
 

@@ -163,6 +163,8 @@ Copy `main.js` + `manifest.json` to your vault's plugin folder.
 
 If this plugin is useful to you, you can support its development:
 
+[![Support me on Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/elevalma)
+
 [![Sponsor on GitHub](https://img.shields.io/badge/Sponsor-%E2%9D%A4-db61a2?logo=github&style=for-the-badge)](https://github.com/sponsors/spenhos)
 
 ---
