@@ -1,11 +1,14 @@
 {
 	"id": "diacritics-free-search",
 	"name": "Diacritics-Free Search",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"minAppVersion": "0.16.0",
 	"description": "Search and replace ignoring diacritics — Hebrew nikud, Arabic tashkil, Latin accents, and more. Works in active note and vault-wide.",
 	"author": "Saleh Penhos",
 	"authorUrl": "https://github.com/spenhos",
-	"fundingUrl": "https://github.com/sponsors/spenhos",
+	"fundingUrl": {
+		"Ko-fi": "https://ko-fi.com/elevalma",
+		"GitHub Sponsors": "https://github.com/sponsors/spenhos"
+	},
 	"isDesktopOnly": false
 }
