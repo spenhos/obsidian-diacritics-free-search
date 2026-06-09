@@ -12,6 +12,8 @@
 
 🌐 [English](./README.md) | [Español](./README_es.md) | [עברית](./README_he.md) | العربية | [Français](./README_fr.md) | [Русский](./README_ru.md) | [Português](./README_pt.md)
 
+[![ادعمني على Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/elevalma)
+
 ---
 
 </div>

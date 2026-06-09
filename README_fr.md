@@ -12,6 +12,8 @@ Nikud hébreu · Tashkil arabe · Accents latins · Grec polytonique · Toute ma
 
 🌐 [English](./README.md) | [Español](./README_es.md) | [עברית](./README_he.md) | [العربية](./README_ar.md) | Français | [Русский](./README_ru.md) | [Português](./README_pt.md)
 
+[![Soutenez-moi sur Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/elevalma)
+
 ---
 
 </div>

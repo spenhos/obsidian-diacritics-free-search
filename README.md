@@ -12,6 +12,8 @@ Hebrew nikud · Arabic tashkil · Latin accents · Greek polytonic · Any Unicod
 
 🌐 English | [Español](./README_es.md) | [עברית](./README_he.md) | [العربية](./README_ar.md) | [Français](./README_fr.md) | [Русский](./README_ru.md) | [Português](./README_pt.md)
 
+[![Support me on Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/elevalma)
+
 ---
 
 </div>

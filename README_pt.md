@@ -12,6 +12,8 @@ Nikud hebraico · Tashkil árabe · Acentos latinos · Grego politônico · Qual
 
 🌐 [English](./README.md) | [Español](./README_es.md) | [עברית](./README_he.md) | [العربية](./README_ar.md) | [Français](./README_fr.md) | [Русский](./README_ru.md) | Português
 
+[![Apoie no Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/elevalma)
+
 ---
 
 </div>
