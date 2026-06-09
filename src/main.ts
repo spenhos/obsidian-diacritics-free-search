@@ -83,5 +83,19 @@ class DFSSettingTab extends PluginSettingTab {
 						void this.plugin.saveSettings();
 					})
 			);
+
+		new Setting(containerEl)
+			.setName("Support this plugin")
+			.setDesc(
+				"Diacritics-Free Search is free and open source. If it helps your work, you can support its development with a coffee. ☕"
+			)
+			.addButton((button) =>
+				button
+					.setButtonText("Support on Ko-fi")
+					.setCta()
+					.onClick(() => {
+						window.open("https://ko-fi.com/elevalma", "_blank");
+					})
+			);
 	}
 }
