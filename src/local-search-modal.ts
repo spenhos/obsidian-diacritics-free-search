@@ -2,6 +2,7 @@ import { App, Editor, MarkdownView } from "obsidian";
 import { EditorView, Decoration, DecorationSet } from "@codemirror/view";
 import type { Range } from "@codemirror/state";
 import { t } from "./i18n";
+import type { DFSSettings } from "./main";
 import { StateEffect, StateField } from "@codemirror/state";
 import { findMatchesIgnoringDiacritics } from "./normalize";
 
@@ -62,10 +63,11 @@ export class LocalSearchBar {
 	private escHandler: ((e: KeyboardEvent) => void) | null = null;
 	private escDoc: Document | null = null;
 
-	constructor(app: App, view: MarkdownView) {
+	constructor(app: App, view: MarkdownView, settings?: DFSSettings) {
 		this.app = app;
 		this.view = view;
 		this.editor = view.editor;
+		if (settings) this.caseSensitive = settings.caseSensitive;
 		// Access the CM6 EditorView from Obsidian's editor
 		this.cmView = (this.editor as unknown as { cm: EditorView }).cm;
 	}
@@ -170,6 +172,7 @@ export class LocalSearchBar {
 
 		const caseLabel = searchRow.createEl("label", { cls: "dfs-bar-option" });
 		const caseCheckbox = caseLabel.createEl("input", { type: "checkbox" });
+		caseCheckbox.checked = this.caseSensitive;
 		caseLabel.appendText(" Aa");
 		caseCheckbox.addEventListener("change", () => {
 			this.caseSensitive = caseCheckbox.checked;

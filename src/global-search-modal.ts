@@ -1,6 +1,7 @@
 import { App, MarkdownView, Modal, TFile } from "obsidian";
 import { findMatchesIgnoringDiacritics } from "./normalize";
 import { t } from "./i18n";
+import type { DFSSettings } from "./main";
 
 interface SearchResult {
 	file: TFile;
@@ -18,9 +19,16 @@ export class GlobalSearchModal extends Modal {
 	private caseSensitive: boolean = false;
 	private results: SearchResult[] = [];
 	private debounceTimer: number | null = null;
+	private minChars: number = 2;
+	private maxFiles: number = 50;
 
-	constructor(app: App) {
+	constructor(app: App, settings?: DFSSettings) {
 		super(app);
+		if (settings) {
+			this.caseSensitive = settings.caseSensitive;
+			this.minChars = settings.minChars;
+			this.maxFiles = settings.maxFiles;
+		}
 	}
 
 	onOpen() {
@@ -57,6 +65,7 @@ export class GlobalSearchModal extends Modal {
 		const optionsRow = contentEl.createDiv({ cls: "dfs-row dfs-options" });
 		const caseLabel = optionsRow.createEl("label", { cls: "dfs-option-label" });
 		const caseCheckbox = caseLabel.createEl("input", { type: "checkbox" });
+		caseCheckbox.checked = this.caseSensitive;
 		caseLabel.appendText(" " + t("caseSensitiveOption"));
 		caseCheckbox.addEventListener("change", () => {
 			this.caseSensitive = caseCheckbox.checked;
@@ -86,8 +95,8 @@ export class GlobalSearchModal extends Modal {
 		this.results = [];
 		this.resultsContainer.empty();
 
-		if (!searchQuery || searchQuery.length < 2) {
-			this.statusEl.setText(searchQuery ? t("typeAtLeast") : "");
+		if (!searchQuery || searchQuery.length < this.minChars) {
+			this.statusEl.setText(searchQuery ? t("typeAtLeast", { min: this.minChars }) : "");
 			return;
 		}
 
@@ -165,7 +174,7 @@ export class GlobalSearchModal extends Modal {
 	private renderResults() {
 		this.resultsContainer.empty();
 
-		for (const result of this.results.slice(0, 50)) {
+		for (const result of this.results.slice(0, this.maxFiles)) {
 			const resultEl = this.resultsContainer.createDiv({ cls: "dfs-result-item" });
 
 			// File header
@@ -225,9 +234,9 @@ export class GlobalSearchModal extends Modal {
 			});
 		}
 
-		if (this.results.length > 50) {
+		if (this.results.length > this.maxFiles) {
 			this.resultsContainer.createDiv({
-				text: t("andMoreFiles", { count: this.results.length - 50 }),
+				text: t("andMoreFiles", { count: this.results.length - this.maxFiles }),
 				cls: "dfs-result-overflow",
 			});
 		}

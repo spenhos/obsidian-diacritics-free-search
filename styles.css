@@ -101,32 +101,32 @@
 	right: 1px;
 	width: 10px;
 	height: 4px;
-	background: rgba(255, 190, 0, 0.9);
+	background: var(--dfs-highlight, #ffd000);
 	border-radius: 1px;
 	cursor: pointer;
 	pointer-events: auto;
 }
 
 .dfs-scrollbar-tick:hover {
-	background: rgba(255, 140, 0, 1);
+	background: var(--dfs-current, #ff8c00);
 }
 
 .dfs-scrollbar-tick-current {
-	background: rgba(255, 100, 0, 1);
+	background: var(--dfs-current, #ff8c00);
 	height: 4px;
-	box-shadow: 0 0 3px rgba(255, 100, 0, 0.8);
+	box-shadow: 0 0 3px var(--dfs-current, #ff8c00);
 }
 
 /* ===== CM6 Match Highlights ===== */
 .dfs-match {
-	background-color: var(--text-highlight-bg, rgba(255, 208, 0, 0.4));
+	background-color: color-mix(in srgb, var(--dfs-highlight, #ffd000) 45%, transparent);
 	border-radius: 2px;
 }
 
 .dfs-match-current {
-	background-color: rgba(255, 140, 0, 0.6);
+	background-color: color-mix(in srgb, var(--dfs-current, #ff8c00) 60%, transparent);
 	border-radius: 2px;
-	box-shadow: 0 0 0 1px rgba(255, 140, 0, 0.8);
+	box-shadow: 0 0 0 1px var(--dfs-current, #ff8c00);
 }
 
 /* ===== Global Search Modal ===== */
@@ -256,7 +256,7 @@
 }
 
 .dfs-result-highlight {
-	background: var(--text-highlight-bg);
+	background: color-mix(in srgb, var(--dfs-highlight, #ffd000) 55%, transparent);
 	color: var(--text-normal);
 	padding: 1px 2px;
 	border-radius: 2px;
@@ -269,3 +269,24 @@
 	color: var(--text-muted);
 	font-size: 13px;
 }
+
+/* ===== Settings tab ===== */
+.dfs-kofi-btn {
+	background-color: #ff5e5b !important;
+	color: #ffffff !important;
+	border: none !important;
+	font-weight: 600;
+}
+.dfs-kofi-btn:hover {
+	background-color: #e8514e !important;
+}
+.dfs-about {
+	margin-top: 1.5em;
+	padding-top: 0.75em;
+	border-top: 1px solid var(--background-modifier-border);
+	color: var(--text-muted);
+	font-size: 0.85em;
+	text-align: center;
+}
+.dfs-about a { color: var(--text-accent); }
+.dfs-links { display: flex; gap: 1.25em; flex-wrap: wrap; }

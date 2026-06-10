@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-diacritics-free-search",
-	"version": "1.0.6",
+	"version": "1.0.7",
 	"description": "Obsidian plugin for diacritics-free search and replace",
 	"main": "main.js",
 	"scripts": {

@@ -166,6 +166,12 @@ Copy `main.js` + `manifest.json` to your vault's plugin folder.
 | Setting | Description | Default |
 |---------|-------------|---------|
 | Case sensitive by default | Start searches with case sensitivity enabled | Off |
+| Match highlight color | Color used to highlight all matches | `#ffd000` |
+| Current match color | Color of the currently selected match | `#ff8c00` |
+| Minimum characters (vault search) | How many characters before the vault search starts | 2 |
+| Maximum files shown (vault search) | Limit how many files appear in vault results | 50 |
+
+The whole interface is **localized** and follows Obsidian's language (English, Español, עברית, العربية, Français, Русский, Português).
 
 ---
 

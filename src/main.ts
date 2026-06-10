@@ -3,13 +3,24 @@ import { LocalSearchBar } from "./local-search-modal";
 import { GlobalSearchModal } from "./global-search-modal";
 import { t, initI18n } from "./i18n";
 
-interface DFSSettings {
+export interface DFSSettings {
 	caseSensitive: boolean;
+	highlightColor: string;
+	currentColor: string;
+	minChars: number;
+	maxFiles: number;
 }
 
 const DEFAULT_SETTINGS: DFSSettings = {
 	caseSensitive: false,
+	highlightColor: "#ffd000",
+	currentColor: "#ff8c00",
+	minChars: 2,
+	maxFiles: 50,
 };
+
+const GITHUB_URL = "https://github.com/spenhos/obsidian-diacritics-free-search";
+const KOFI_URL = "https://ko-fi.com/elevalma";
 
 // Keep one search bar per leaf so it remembers the last query
 const searchBars = new WeakMap<MarkdownView, LocalSearchBar>();
@@ -20,6 +31,7 @@ export default class DiacriticsFreeSearchPlugin extends Plugin {
 	async onload() {
 		await this.loadSettings();
 		initI18n();
+		this.applyColors();
 
 		// Command: Local search (in active note)
 		this.addCommand({
@@ -29,7 +41,7 @@ export default class DiacriticsFreeSearchPlugin extends Plugin {
 				if (view instanceof MarkdownView) {
 					let bar = searchBars.get(view);
 					if (!bar) {
-						bar = new LocalSearchBar(this.app, view);
+						bar = new LocalSearchBar(this.app, view, this.settings);
 						searchBars.set(view, bar);
 					}
 					bar.open();
@@ -42,7 +54,7 @@ export default class DiacriticsFreeSearchPlugin extends Plugin {
 			id: "dfs-global-search",
 			name: t("cmdGlobal"),
 			callback: () => {
-				new GlobalSearchModal(this.app).open();
+				new GlobalSearchModal(this.app, this.settings).open();
 			},
 		});
 
@@ -59,6 +71,13 @@ export default class DiacriticsFreeSearchPlugin extends Plugin {
 
 	async saveSettings() {
 		await this.saveData(this.settings);
+		this.applyColors();
+	}
+
+	applyColors() {
+		const root = activeDocument.body;
+		root.style.setProperty("--dfs-highlight", this.settings.highlightColor);
+		root.style.setProperty("--dfs-current", this.settings.currentColor);
 	}
 }
 
@@ -94,31 +113,95 @@ class DFSSettingTab extends PluginSettingTab {
 
 		help.createEl("p", { text: t("tip") });
 
-		// Settings
-		new Setting(containerEl).setName(t("settings")).setHeading();
+		const s = this.plugin.settings;
+		const save = () => void this.plugin.saveSettings();
+
+		// Search
+		new Setting(containerEl).setName(t("searchHeading")).setHeading();
 
 		new Setting(containerEl)
 			.setName(t("caseDefault"))
 			.setDesc(t("caseDefaultDesc"))
 			.addToggle((toggle) =>
-				toggle
-					.setValue(this.plugin.settings.caseSensitive)
+				toggle.setValue(s.caseSensitive).onChange((value) => {
+					s.caseSensitive = value;
+					save();
+				})
+			);
+
+		new Setting(containerEl)
+			.setName(t("highlightColor"))
+			.setDesc(t("highlightColorDesc"))
+			.addColorPicker((cp) =>
+				cp.setValue(s.highlightColor).onChange((value) => {
+					s.highlightColor = value;
+					save();
+				})
+			);
+
+		new Setting(containerEl)
+			.setName(t("currentColor"))
+			.setDesc(t("currentColorDesc"))
+			.addColorPicker((cp) =>
+				cp.setValue(s.currentColor).onChange((value) => {
+					s.currentColor = value;
+					save();
+				})
+			);
+
+		new Setting(containerEl)
+			.setName(t("minChars"))
+			.setDesc(t("minCharsDesc"))
+			.addSlider((sl) =>
+				sl
+					.setLimits(1, 5, 1)
+					.setValue(s.minChars)
+					.setDynamicTooltip()
 					.onChange((value) => {
-						this.plugin.settings.caseSensitive = value;
-						void this.plugin.saveSettings();
+						s.minChars = value;
+						save();
 					})
 			);
 
 		new Setting(containerEl)
-			.setName(t("support"))
-			.setDesc(t("supportDesc"))
-			.addButton((button) =>
-				button
-					.setButtonText(t("supportBtn"))
-					.setCta()
-					.onClick(() => {
-						window.open("https://ko-fi.com/elevalma", "_blank");
-					})
+			.setName(t("maxFiles"))
+			.setDesc(t("maxFilesDesc"))
+			.addText((txt) =>
+				txt.setValue(String(s.maxFiles)).onChange((value) => {
+					const n = parseInt(value, 10);
+					if (!isNaN(n) && n > 0) {
+						s.maxFiles = n;
+						save();
+					}
+				})
 			);
+
+		// Support
+		new Setting(containerEl).setName(t("support")).setHeading();
+
+		new Setting(containerEl)
+			.setName(t("supportBtn"))
+			.setDesc(t("supportDesc"))
+			.addButton((button) => {
+				button
+					.setButtonText("☕ " + t("supportBtn"))
+					.onClick(() => window.open(KOFI_URL, "_blank"));
+				button.buttonEl.addClass("dfs-kofi-btn");
+				return button;
+			});
+
+		// About
+		const about = containerEl.createDiv({ cls: "dfs-about" });
+		about.createSpan({
+			text: `Diacritics-Free Search v${this.plugin.manifest.version} · `,
+		});
+		const gh = about.createEl("a", { text: t("viewGithub"), href: GITHUB_URL });
+		gh.setAttr("target", "_blank");
+		about.createSpan({ text: " · " });
+		const issue = about.createEl("a", {
+			text: t("reportIssue"),
+			href: GITHUB_URL + "/issues",
+		});
+		issue.setAttr("target", "_blank");
 	}
 }
