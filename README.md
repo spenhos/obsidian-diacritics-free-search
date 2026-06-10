@@ -7,10 +7,10 @@
 Hebrew nikud · Arabic tashkil · Latin accents · Greek polytonic · Any Unicode combining mark
 
 [![GitHub release](https://img.shields.io/github/v/release/spenhos/obsidian-diacritics-free-search?style=flat-square)](https://github.com/spenhos/obsidian-diacritics-free-search/releases)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](./LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://github.com/spenhos/obsidian-diacritics-free-search/blob/main/LICENSE)
 [![Ko-fi](https://img.shields.io/badge/Support-Ko--fi-FF5E5B?style=flat-square&logo=ko-fi&logoColor=white)](https://ko-fi.com/elevalma)
 
-🌐 English | [Español](./README_es.md) | [עברית](./README_he.md) | [العربية](./README_ar.md) | [Français](./README_fr.md) | [Русский](./README_ru.md) | [Português](./README_pt.md)
+🌐 English | [Español](https://github.com/spenhos/obsidian-diacritics-free-search/blob/main/README_es.md) | [עברית](https://github.com/spenhos/obsidian-diacritics-free-search/blob/main/README_he.md) | [العربية](https://github.com/spenhos/obsidian-diacritics-free-search/blob/main/README_ar.md) | [Français](https://github.com/spenhos/obsidian-diacritics-free-search/blob/main/README_fr.md) | [Русский](https://github.com/spenhos/obsidian-diacritics-free-search/blob/main/README_ru.md) | [Português](https://github.com/spenhos/obsidian-diacritics-free-search/blob/main/README_pt.md)
 
 [![Support me on Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/elevalma)
 

@@ -7,10 +7,10 @@
 Nikud hébreu · Tashkil arabe · Accents latins · Grec polytonique · Toute marque combinante Unicode
 
 [![GitHub release](https://img.shields.io/github/v/release/spenhos/obsidian-diacritics-free-search?style=flat-square)](https://github.com/spenhos/obsidian-diacritics-free-search/releases)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](./LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://github.com/spenhos/obsidian-diacritics-free-search/blob/main/LICENSE)
 [![Ko-fi](https://img.shields.io/badge/Support-Ko--fi-FF5E5B?style=flat-square&logo=ko-fi&logoColor=white)](https://ko-fi.com/elevalma)
 
-🌐 [English](./README.md) | [Español](./README_es.md) | [עברית](./README_he.md) | [العربية](./README_ar.md) | Français | [Русский](./README_ru.md) | [Português](./README_pt.md)
+🌐 [English](https://github.com/spenhos/obsidian-diacritics-free-search/blob/main/README.md) | [Español](https://github.com/spenhos/obsidian-diacritics-free-search/blob/main/README_es.md) | [עברית](https://github.com/spenhos/obsidian-diacritics-free-search/blob/main/README_he.md) | [العربية](https://github.com/spenhos/obsidian-diacritics-free-search/blob/main/README_ar.md) | Français | [Русский](https://github.com/spenhos/obsidian-diacritics-free-search/blob/main/README_ru.md) | [Português](https://github.com/spenhos/obsidian-diacritics-free-search/blob/main/README_pt.md)
 
 [![Soutenez-moi sur Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/elevalma)
 
