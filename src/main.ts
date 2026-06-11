@@ -156,7 +156,6 @@ class DFSSettingTab extends PluginSettingTab {
 				sl
 					.setLimits(1, 5, 1)
 					.setValue(s.minChars)
-					.setDynamicTooltip()
 					.onChange((value) => {
 						s.minChars = value;
 						save();
