@@ -3,12 +3,19 @@ import { LocalSearchBar } from "./local-search-modal";
 import { GlobalSearchModal } from "./global-search-modal";
 import { t, initI18n } from "./i18n";
 
+export type SearchTrigger = "pause" | "enter";
+
 export interface DFSSettings {
 	caseSensitive: boolean;
 	highlightColor: string;
 	currentColor: string;
 	minChars: number;
 	maxFiles: number;
+	// In-note search: when to run the search as the user types.
+	// "pause" = debounced after typing stops; "enter" = only on the Enter key.
+	searchTrigger: SearchTrigger;
+	// Debounce delay in ms for "pause" mode.
+	searchDelay: number;
 }
 
 const DEFAULT_SETTINGS: DFSSettings = {
@@ -17,6 +24,8 @@ const DEFAULT_SETTINGS: DFSSettings = {
 	currentColor: "#ff8c00",
 	minChars: 2,
 	maxFiles: 50,
+	searchTrigger: "pause",
+	searchDelay: 400,
 };
 
 const GITHUB_URL = "https://github.com/spenhos/obsidian-diacritics-free-search";
@@ -127,6 +136,34 @@ class DFSSettingTab extends PluginSettingTab {
 					s.caseSensitive = value;
 					save();
 				})
+			);
+
+		new Setting(containerEl)
+			.setName(t("searchTrigger"))
+			.setDesc(t("searchTriggerDesc"))
+			.addDropdown((dd) =>
+				dd
+					.addOption("pause", t("triggerPause"))
+					.addOption("enter", t("triggerEnter"))
+					.setValue(s.searchTrigger)
+					.onChange((value) => {
+						s.searchTrigger = value as SearchTrigger;
+						save();
+					})
+			);
+
+		new Setting(containerEl)
+			.setName(t("searchDelay"))
+			.setDesc(t("searchDelayDesc"))
+			.addSlider((sl) =>
+				sl
+					.setLimits(100, 1000, 50)
+					.setValue(s.searchDelay)
+					.setDynamicTooltip()
+					.onChange((value) => {
+						s.searchDelay = value;
+						save();
+					})
 			);
 
 		new Setting(containerEl)
