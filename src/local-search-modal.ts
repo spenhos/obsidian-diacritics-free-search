@@ -4,7 +4,8 @@ import type { Range } from "@codemirror/state";
 import { t } from "./i18n";
 import type { DFSSettings } from "./main";
 import { StateEffect, StateField } from "@codemirror/state";
-import { findMatchesIgnoringDiacritics } from "./normalize";
+import { buildNormalizedIndex, findMatchesInIndex } from "./normalize";
+import type { NormalizedIndex } from "./normalize";
 
 // CM6 effects for managing highlights
 const setDFSHighlights = StateEffect.define<{ matches: Array<{ start: number; end: number }>; current: number }>();
@@ -60,6 +61,15 @@ export class LocalSearchBar {
 	private scrollbarMarkersEl: HTMLElement | null = null;
 	private lastQuery: string = "";
 	private lastReplace: string = "";
+	private settings?: DFSSettings;
+	// Cached diacritics-stripped index of the current note, rebuilt only when the
+	// note's text changes — not on every keystroke.
+	private index: NormalizedIndex | null = null;
+	private indexContent: string | null = null;
+	// Debounce timer for "search as you type", and the query the visible matches
+	// currently reflect (so Enter knows whether to re-search or jump to next).
+	private searchDebounce: number | null = null;
+	private lastSearchedQuery: string = "";
 	private escHandler: ((e: KeyboardEvent) => void) | null = null;
 	private escDoc: Document | null = null;
 
@@ -67,6 +77,7 @@ export class LocalSearchBar {
 		this.app = app;
 		this.view = view;
 		this.editor = view.editor;
+		this.settings = settings;
 		if (settings) this.caseSensitive = settings.caseSensitive;
 		// Access the CM6 EditorView from Obsidian's editor
 		this.cmView = (this.editor as unknown as { cm: EditorView }).cm;
@@ -110,6 +121,12 @@ export class LocalSearchBar {
 
 	close() {
 		if (!this.isOpen) return;
+
+		// Cancel any pending debounced search
+		if (this.searchDebounce !== null) {
+			window.clearTimeout(this.searchDebounce);
+			this.searchDebounce = null;
+		}
 
 		// Save current query before closing
 		if (this.searchInput) {
@@ -197,12 +214,29 @@ export class LocalSearchBar {
 		replaceAllBtn.addEventListener("click", () => this.replaceAll());
 
 		// Events
-		this.searchInput.addEventListener("input", () => this.doSearch());
+		this.searchInput.addEventListener("input", () => {
+			// "enter" mode: don't search while typing — wait for the Enter key.
+			const trigger = this.settings?.searchTrigger ?? "pause";
+			if (trigger === "enter") return;
+			// "pause" mode: search once the user stops typing (debounced).
+			if (this.searchDebounce !== null) window.clearTimeout(this.searchDebounce);
+			const delay = this.settings?.searchDelay ?? 400;
+			this.searchDebounce = window.setTimeout(() => this.doSearch(), delay);
+		});
 		this.searchInput.addEventListener("keydown", (evt) => {
 			if (evt.key === "Enter") {
-				if (evt.shiftKey) this.navigateMatch(-1);
-				else this.navigateMatch(1);
 				evt.preventDefault();
+				if (this.searchDebounce !== null) {
+					window.clearTimeout(this.searchDebounce);
+					this.searchDebounce = null;
+				}
+				// If the query changed since the last search, search now (this is
+				// what triggers the search in "enter" mode, and lets an impatient
+				// user in "pause" mode skip the wait). Otherwise, jump between the
+				// existing matches.
+				if (this.searchInput.value !== this.lastSearchedQuery) this.doSearch();
+				else if (evt.shiftKey) this.navigateMatch(-1);
+				else this.navigateMatch(1);
 			}
 			if (evt.key === "Escape") this.close();
 		});
@@ -219,6 +253,7 @@ export class LocalSearchBar {
 
 	private doSearch() {
 		const query = this.searchInput.value;
+		this.lastSearchedQuery = query;
 
 		if (!query) {
 			this.matches = [];
@@ -228,8 +263,14 @@ export class LocalSearchBar {
 			return;
 		}
 
+		// Rebuild the diacritics-stripped index only when the note text changed;
+		// typing a query reuses the cached index and just re-scans it.
 		const content = this.editor.getValue();
-		this.matches = findMatchesIgnoringDiacritics(content, query, this.caseSensitive);
+		if (this.index === null || content !== this.indexContent) {
+			this.index = buildNormalizedIndex(content);
+			this.indexContent = content;
+		}
+		this.matches = findMatchesInIndex(this.index, query, this.caseSensitive);
 
 		if (this.matches.length > 0) {
 			this.currentMatchIdx = 0;
@@ -355,9 +396,16 @@ export class LocalSearchBar {
 		const content = this.editor.getValue();
 		const totalLines = content.split("\n").length;
 
+		// Matches are in ascending start order, so count newlines with a single
+		// forward sweep instead of re-scanning from the start for every match.
+		let scanPos = 0;
+		let linesBeforeMatch = 0;
 		for (let i = 0; i < this.matches.length; i++) {
 			const match = this.matches[i];
-			const linesBeforeMatch = content.substring(0, match.start).split("\n").length - 1;
+			while (scanPos < match.start) {
+				if (content.charCodeAt(scanPos) === 10) linesBeforeMatch++;
+				scanPos++;
+			}
 			const percent = (linesBeforeMatch / totalLines) * 100;
 
 			const marker = markersEl.createDiv({ cls: "dfs-scrollbar-tick" });
